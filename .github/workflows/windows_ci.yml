@@ -26,4 +26,4 @@ jobs:
         run: |
           dist\basic_example
           dist\interactive_example
-          powershell -command "Get-Content test.txt"
+          dir
