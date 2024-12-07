@@ -1,0 +1,29 @@
+name: Build CI [MacOS]
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Vim
+        uses: rhysd/action-setup-vim@v1
+
+      - name: Build Example
+        run: |
+          mkdir dist
+          g++ -o dist/basic_example -Iinclude src/myshell.cpp examples/basic_example.cpp
+          g++ -o dist/interactive_example -Iinclude src/myshell.cpp examples/interactive_example.cpp
+
+      - name: Test Build Output Binaries
+        run: |
+          dist/basic_example
+          dist/interactive_example
+          cat test.txt
