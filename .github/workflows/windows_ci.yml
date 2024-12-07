@@ -24,5 +24,6 @@ jobs:
 
       - name: Test Build Output Binaries
         run: |
-          dist\interactive_example
           dist\basic_example
+          dist\interactive_example
+          powershell -command "Get-Content test.txt"
