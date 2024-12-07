@@ -79,8 +79,8 @@ void MyShell::createWindowsProcess(const std::string& command) {
 
     HANDLE inputRead, outputWrite, errorWrite;
     if(!CreatePipe(&inputRead, &this->inputWriteHandle, &saAttr, 0) ||
-        !CreatePipe(&this->outputReadHandle, &this->outputWrite, &saAttr, 0) ||
-        !CreatePipe(&this->errorReadHandle, &this->errorWrite, &saAttr, 0))
+        !CreatePipe(&this->outputReadHandle, &outputWrite, &saAttr, 0) ||
+        !CreatePipe(&this->errorReadHandle, &errorWrite, &saAttr, 0))
         throw std::system_error(
             GetLastError(),
             std::system_category(),
