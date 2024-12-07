@@ -22,7 +22,7 @@
 #include <stdexcept>
 #include <system_error>
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 MyShell::MyShell(std::string command) :
     procHasExited(false),
