@@ -23,7 +23,13 @@
 int main() {
     try {
         // Create shell instance withcommand
-        MyShell shell("TERM=dumb vim -u NONE -n test.txt");
+        MyShell shell(
+            #ifdef _WIN32
+            "TERM=dumb vim -u NONE -n test.txt"
+            #else
+            "vim test.txt"
+            #endif
+        );
 
         shell.writeToShell("i");        // Insert mode
         shell.writeToShell("Hi");       // Write the text
