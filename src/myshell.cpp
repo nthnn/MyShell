@@ -26,24 +26,35 @@ using namespace std::literals::chrono_literals;
 
 MyShell::MyShell(std::string command) :
     procHasExited(false),
+    stopSignal(false),
     procExitCode(0),
-    stopSignal(false)
+    outputBuffer(""),
+    errorBuffer(""),
+    outputMutex(),
+    errorMutex(),
+    outputReader(std::thread(
+        &MyShell::outputReaderThread,
+        this
+    )),
+    errorReader(std::thread(
+        &MyShell::errorReaderThread,
+        this
+    )),
+    #ifdef _WIN32
+    procHandle(0),
+    inputWriteHandle(0),
+    outputReadHandle(0),
+    errorReadHandle(0),
+    procId(0)
+    #else
+    procId(0)
+    #endif
 {
     #ifdef _WIN32
     this->createWindowsProcess(command);
     #else
     this->createUnixProcess(command);
     #endif
-
-    this->outputReader = std::thread(
-        &MyShell::outputReaderThread,
-        this
-    );
-
-    this->errorReader = std::thread(
-        &MyShell::errorReaderThread,
-        this
-    );
 }
 
 MyShell::~MyShell() {
@@ -145,7 +156,9 @@ void MyShell::readFromPipe(HANDLE pipe, std::string& buffer, std::mutex& mutex) 
                 buffer += tempBuffer.data();
             }
         }
-        else std::this_thread::sleep_for(10ms);
+        else std::this_thread::sleep_for(
+            std::chrono::milliseconds(10)
+        );
     }
 }
 
@@ -220,7 +233,9 @@ void MyShell::readFromPipe(int pipe, std::string& buffer, std::mutex& mutex) {
             buffer += tempBuffer.data();
         }
         else if(bytesRead == -1 && errno == EAGAIN)
-            std::this_thread::sleep_for(10ms);
+            std::this_thread::sleep_for(
+                std::chrono::milliseconds(10)
+            );
     }
 }
 
