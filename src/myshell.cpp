@@ -227,7 +227,7 @@ void MyShell::readFromPipe(int pipe, std::string& buffer, std::mutex& mutex) {
         );
 
         if(bytesRead > 0) {
-            tempBuffer[bytesRead] = '\0';
+            tempBuffer[(size_t) bytesRead] = '\0';
 
             std::lock_guard<std::mutex> lock(mutex);
             buffer += tempBuffer.data();
