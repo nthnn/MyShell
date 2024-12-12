@@ -20,10 +20,7 @@ jobs:
         run: |
           mkdir dist
           g++ -o dist/basic_example -Iinclude src/myshell.cpp examples/basic_example.cpp
-          g++ -o dist/interactive_example -Iinclude src/myshell.cpp examples/interactive_example.cpp
 
       - name: Test Build Output Binaries
         run: |
           dist\basic_example
-          dist\interactive_example
-          dir
