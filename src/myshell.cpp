@@ -93,7 +93,7 @@ void MyShell::createWindowsProcess(const std::string& command) {
         !CreatePipe(&this->outputReadHandle, &outputWrite, &saAttr, 0) ||
         !CreatePipe(&this->errorReadHandle, &errorWrite, &saAttr, 0))
         throw std::system_error(
-            GetLastError(),
+            static_cast<int>(GetLastError()),
             std::system_category(),
             "Failed to create pipes"
         );
@@ -120,7 +120,7 @@ void MyShell::createWindowsProcess(const std::string& command) {
         NULL, NULL,
         &siStartInfo, &piProcInfo
     )) throw std::system_error(
-        GetLastError(),
+        static_cast<int>(GetLastError()),
         std::system_category(),
         "Failed to create process"
     );
@@ -304,7 +304,7 @@ void MyShell::writeToShell(std::string input) {
         &bytesWritten,
         NULL
     )) throw std::system_error(
-        GetLastError(),
+        static_cast<int>(GetLastError()),
         std::system_category(),
         "Failed to write to process"
     );
